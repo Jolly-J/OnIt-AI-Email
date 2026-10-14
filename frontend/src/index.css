@@ -1,0 +1,268 @@
+@import "./styles/transitions.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 250 14% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 250 14% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 250 14% 15%;
+    --primary: 138 82% 38%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 246 16% 95%;
+    --secondary-foreground: 248 12% 20%;
+    --muted: 246 14% 95%;
+    --muted-foreground: 250 8% 46%;
+    --accent: 138 82% 38%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 246 12% 90%;
+    --input: 246 12% 90%;
+    --ring: 138 82% 38%;
+    --radius: 0.875rem;
+
+    --sidebar-background: 248 20% 98%;
+    --sidebar-foreground: 250 14% 20%;
+    --sidebar-primary: 138 82% 38%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 246 14% 93%;
+    --sidebar-accent-foreground: 250 14% 15%;
+    --sidebar-border: 246 12% 90%;
+    --sidebar-ring: 138 82% 38%;
+  }
+
+  .dark {
+    --background: 250 14% 9%;
+    --foreground: 246 10% 96%;
+    --card: 250 14% 11%;
+    --card-foreground: 246 10% 96%;
+    --popover: 250 14% 11%;
+    --popover-foreground: 246 10% 96%;
+    --primary: 140 75% 45%;
+    --primary-foreground: 140 50% 10%;
+    --secondary: 250 10% 16%;
+    --secondary-foreground: 246 10% 96%;
+    --muted: 250 10% 16%;
+    --muted-foreground: 250 8% 65%;
+    --accent: 140 75% 45%;
+    --accent-foreground: 140 50% 10%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 246 10% 96%;
+    --border: 250 10% 18%;
+    --input: 250 10% 18%;
+    --ring: 140 75% 45%;
+
+    --sidebar-background: 250 14% 8%;
+    --sidebar-foreground: 246 10% 96%;
+    --sidebar-primary: 140 75% 45%;
+    --sidebar-primary-foreground: 140 50% 10%;
+    --sidebar-accent: 250 10% 15%;
+    --sidebar-accent-foreground: 246 10% 96%;
+    --sidebar-border: 250 10% 16%;
+    --sidebar-ring: 140 75% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+  }
+}
+
+/* 钉钉与 Windows 经典 8px 滚动条优化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+.stable-scrollbar {
+  scrollbar-gutter: stable;
+}
+
+/* 隐藏滚动条但保留平滑滚动能力 */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* 邮件正文自适应容器与实际宽度约束 */
+.mail-content-container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.mail-content-container img,
+.mail-content-container video,
+.mail-content-container iframe {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.mail-content-container table {
+  max-width: 100% !important;
+}
+
+.mail-content-container pre,
+.mail-content-container p,
+.mail-content-container div {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* 新邮件实时推送到信动效（平滑下推 + 浅蓝微光） */
+@keyframes slideDownFade {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-20px) scale(0.97);
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+  60% {
+    opacity: 0.85;
+    max-height: 140px;
+    transform: translateY(-4px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    max-height: 280px;
+    transform: translateY(0) scale(1);
+    overflow: visible;
+  }
+}
+
+@keyframes highlightGlow {
+  0% {
+    background-color: hsl(var(--primary) / 0.2);
+    border-color: hsl(var(--primary) / 0.65);
+    box-shadow: 0 0 16px hsl(var(--primary) / 0.3);
+  }
+  70% {
+    background-color: hsl(var(--primary) / 0.08);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.animate-slide-down-new {
+  animation: slideDownFade var(--duration-very-slow) var(--ease-smooth-out) forwards,
+             highlightGlow 3.5s ease-out forwards;
+}
+
+/* 移动端与钉钉 WebView 安全区与触控增强 */
+.pb-safe-offset {
+  padding-bottom: 0.75rem;
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pl-safe {
+    padding-left: env(safe-area-inset-left);
+  }
+  .pr-safe {
+    padding-right: env(safe-area-inset-right);
+  }
+  .bottom-safe {
+    bottom: env(safe-area-inset-bottom);
+  }
+}
+
+.touch-pan-y {
+  touch-action: pan-y;
+}
+
+.no-overscroll {
+  overscroll-behavior: contain;
+}
+
+/* 移动端消除点击高亮灰色背景 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 移动端页面推栈进出场原生动效 (iOS 级 60fps 硬件加速) */
+@keyframes mobilePushIn {
+  from {
+    opacity: 0.96;
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes mobilePopIn {
+  from {
+    opacity: 0.96;
+    transform: translate3d(-18%, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.mobile-push-in {
+  animation: mobilePushIn var(--duration-fast) var(--ease-smooth-out) forwards;
+  will-change: transform, opacity;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-pop-in {
+  animation: mobilePopIn var(--duration-fast) var(--ease-smooth-out) forwards;
+  will-change: transform, opacity;
+}
+
+.touch-press {
+  transition: transform 0.12s ease-out;
+}
+.touch-press:active {
+  transform: scale(0.985);
+}
+
+/* 移动端全平台 WebView 抽屉高度安全适配器（支持双档位自由吸附切换与防动态压缩） */
+.mobile-drawer-responsive-height {
+  transition: height 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: height;
+}

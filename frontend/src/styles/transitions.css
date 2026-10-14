@@ -1,0 +1,645 @@
+/* transitions.dev & transitions-polish — Design Motion Tokens & Utility Classes */
+
+:root {
+  /* ── Motion Tokens: Durations ────────────────────────── */
+  --duration-stagger: 40ms;
+  --duration-micro: 80ms;
+  --duration-quick: 150ms;
+  --duration-fast: 250ms;
+  --duration-medium: 350ms;
+  --duration-slow: 400ms;
+  --duration-very-slow: 500ms;
+
+  /* ── Motion Tokens: Easings ──────────────────────────── */
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: ease-in-out;
+  --ease-out: ease-out;
+  --ease-linear: linear;
+  --ease-bounce: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --ease-bounce-strong: cubic-bezier(0.34, 3.85, 0.64, 1);
+
+  /* ── Motion Tokens: Distances ────────────────────────── */
+  --distance-micro: 4px;
+  --distance-small: 6px;
+  --distance-base: 8px;
+  --distance-medium: 12px;
+  --distance-large: 30px;
+
+  /* ── Motion Tokens: Scales ───────────────────────────── */
+  --scale-large: 0.96;
+  --scale-medium: 0.97;
+  --scale-small: 0.98;
+  --scale-tiny: 0.99;
+
+  /* ── Motion Tokens: Blur ─────────────────────────────── */
+  --blur-small: 2px;
+  --blur-medium: 3px;
+  --blur-large: 8px;
+
+  /* ── 06-Modal ────────────────────────────────────────── */
+  --modal-open-dur: 250ms;
+  --modal-close-dur: 150ms;
+  --modal-scale: 0.96;
+  --modal-scale-close: 0.96;
+  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── 28-Thinking States ──────────────────────────────── */
+  --think-hold: 2200ms;
+  --think-swap: 150ms;
+  --think-gap: 50ms;
+  --think-distance: 8px;
+  --think-blur: 2px;
+  --think-shimmer: 2000ms;
+  --think-base: hsl(var(--muted-foreground));
+  --think-highlight: hsl(var(--foreground));
+  --think-ease: ease-in-out;
+
+  /* ── 16-Tabs Sliding ─────────────────────────────────── */
+  --tabs-dur: 250ms;
+  --tabs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── 14-Skeleton Reveal ──────────────────────────────── */
+  --pulse-dur: 1200ms;
+  --pulse-min: 0.5;
+  --reveal-dur: 400ms;
+  --reveal-blur: 2px;
+  --reveal-ease: ease-in-out;
+
+  /* ── 05-Menu Dropdown ────────────────────────────────── */
+  --dropdown-open-dur: 250ms;
+  --dropdown-close-dur: 150ms;
+  --dropdown-pre-scale: 0.97;
+  --dropdown-closing-scale: 0.99;
+  --dropdown-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── 21-Accordion ────────────────────────────────────── */
+  --accordion-dur: 250ms;
+  --accordion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── 12-Error Shake ──────────────────────────────────── */
+  --shake-dur: 450ms;
+  --shake-distance: 6px;
+}
+
+/* =========================================================
+   06-Modal: 非对称进退模态窗口
+   ========================================================= */
+.t-modal-backdrop {
+  opacity: 0;
+  transition: opacity var(--modal-open-dur) var(--modal-ease);
+  will-change: opacity;
+}
+.t-modal-backdrop.is-open {
+  opacity: 1;
+}
+.t-modal-backdrop.is-closing {
+  opacity: 0;
+  transition: opacity var(--modal-close-dur) var(--modal-ease);
+}
+
+.t-modal-surface {
+  transform-origin: center;
+  transform: scale(var(--modal-scale)) translateY(4px);
+  opacity: 0;
+  transition:
+    transform var(--modal-open-dur) var(--modal-ease),
+    opacity   var(--modal-open-dur) var(--modal-ease);
+  will-change: transform, opacity;
+}
+.t-modal-surface.is-open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+.t-modal-surface.is-closing {
+  transform: scale(var(--modal-scale-close)) translateY(2px);
+  opacity: 0;
+  transition:
+    transform var(--modal-close-dur) var(--modal-ease),
+    opacity   var(--modal-close-dur) var(--modal-ease);
+}
+
+/* =========================================================
+   28-Thinking States: AI 思考态流转与文本扫光
+   ========================================================= */
+@keyframes t-shimmer-sweep {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.t-think-stream {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.t-think-text {
+  position: relative;
+  display: inline-block;
+  color: var(--think-base);
+  background-image: linear-gradient(
+    90deg,
+    hsl(var(--muted-foreground) / 0.8) 0%,
+    hsl(var(--foreground)) 50%,
+    hsl(var(--muted-foreground) / 0.8) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: t-shimmer-sweep var(--think-shimmer) linear infinite;
+  will-change: background-position;
+}
+
+.t-think-swap-in {
+  animation: tThinkSwapIn var(--think-swap) var(--think-ease) forwards;
+}
+
+.t-think-swap-out {
+  animation: tThinkSwapOut var(--think-swap) var(--think-ease) forwards;
+}
+
+@keyframes tThinkSwapIn {
+  from {
+    transform: translateY(var(--think-distance));
+    opacity: 0;
+    filter: blur(var(--think-blur));
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes tThinkSwapOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    transform: translateY(calc(-1 * var(--think-distance)));
+    opacity: 0;
+    filter: blur(var(--think-blur));
+  }
+}
+
+/* =========================================================
+   16-Tabs Sliding: 语义化胶囊滑动选项卡
+   ========================================================= */
+.t-tabs-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border-radius: 9999px;
+}
+
+.t-tabs-pill-indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 9999px;
+  transition:
+    transform var(--tabs-dur) var(--tabs-ease),
+    width var(--tabs-dur) var(--tabs-ease);
+  will-change: transform, width;
+}
+
+/* =========================================================
+   14-Skeleton Reveal: 拟真骨架屏脉冲与交叉淡入
+   ========================================================= */
+@keyframes t-skel-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: var(--pulse-min);
+  }
+}
+
+.t-skel-pulse-bar {
+  animation: t-skel-pulse var(--pulse-dur) var(--ease-linear) infinite;
+  background-color: hsl(var(--muted));
+  border-radius: 0.375rem;
+}
+
+/* =========================================================
+   04-Text States Swap: 原位文本状态平滑替换 (04-text-states-swap.md)
+   ========================================================= */
+:root {
+  --text-swap-dur: 200ms;
+  --text-swap-translate-y: 6px;
+  --text-swap-blur: 2px;
+  --text-swap-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.t-text-swap {
+  display: inline-block;
+  transform: translateY(0);
+  filter: blur(0);
+  opacity: 1;
+  transition:
+    transform var(--text-swap-dur) var(--text-swap-ease),
+    filter    var(--text-swap-dur) var(--text-swap-ease),
+    opacity   var(--text-swap-dur) var(--text-swap-ease);
+  will-change: transform, filter, opacity;
+}
+.t-text-swap.is-exit {
+  transform: translateY(calc(var(--text-swap-translate-y) * -1));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+}
+.t-text-swap.is-enter-start {
+  transform: translateY(var(--text-swap-translate-y));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+  transition: none !important;
+}
+
+/* =========================================================
+   05-Menu Dropdown: 原点感知下拉菜单 (05-menu-dropdown.md)
+   ========================================================= */
+@keyframes tDropdownPop {
+  0% {
+    transform: scale(var(--dropdown-pre-scale)) translateY(-4px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.t-dropdown-surface {
+  transform-origin: top center;
+  animation: tDropdownPop var(--dropdown-open-dur) var(--dropdown-ease) forwards;
+  will-change: transform, opacity;
+}
+
+/* 通用与 Radix 下拉菜单出退场动效 */
+.t-dropdown {
+  transform-origin: top center;
+  transform: scale(var(--dropdown-pre-scale)) translateY(-4px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-open-dur) var(--dropdown-ease),
+    opacity   var(--dropdown-open-dur) var(--dropdown-ease);
+  will-change: transform, opacity;
+}
+
+.t-dropdown.is-open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.t-dropdown.is-closing {
+  transform: scale(var(--dropdown-closing-scale)) translateY(-2px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-close-dur) var(--dropdown-ease),
+    opacity   var(--dropdown-close-dur) var(--dropdown-ease);
+}
+
+.t-dropdown-radix[data-state="open"] {
+  animation: tDropdownOpen var(--dropdown-open-dur) var(--dropdown-ease) forwards;
+}
+
+.t-dropdown-radix[data-state="closed"] {
+  animation: tDropdownClose var(--dropdown-close-dur) var(--dropdown-ease) forwards;
+}
+
+@keyframes tDropdownOpen {
+  from {
+    opacity: 0;
+    transform: scale(var(--dropdown-pre-scale)) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes tDropdownClose {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(var(--dropdown-closing-scale)) translateY(-2px);
+  }
+}
+
+/* =========================================================
+   12-Error State Shake: 表单校验抖动反馈
+   ========================================================= */
+@keyframes t-shake-anim {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(calc(-1 * var(--shake-distance))); }
+  40% { transform: translateX(var(--shake-distance)); }
+  60% { transform: translateX(calc(-0.5 * var(--shake-distance))); }
+  80% { transform: translateX(calc(0.5 * var(--shake-distance))); }
+}
+
+.t-error-shake {
+  animation: t-shake-anim var(--shake-dur) cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* =========================================================
+   03-Notification Badge & 09-Icon Swap
+   ========================================================= */
+@keyframes t-badge-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.t-badge-pop-in {
+  animation: t-badge-pop 350ms var(--ease-bounce) both;
+}
+
+.t-icon-swap-in {
+  animation: tIconSwapIn 250ms var(--ease-smooth-out) both;
+}
+
+@keyframes tIconSwapIn {
+  from {
+    transform: scale(0.65) rotate(-15deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   10-Success Check: 操作成功勾选与路径绘制 (10-success-check.md)
+   ========================================================= */
+:root {
+  --check-opacity-dur: 400ms;
+  --check-rotate-dur: 450ms;
+  --check-rotate-from: 60deg;
+  --check-bob-dur: 450ms;
+  --check-y-amount: 20px;
+  --check-blur-dur: 350ms;
+  --check-blur-from: 6px;
+  --check-path-dur: 400ms;
+  --check-path-delay: 80ms;
+  --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-ease-bob: cubic-bezier(0.34, 1.35, 0.64, 1);
+}
+
+.t-success-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(var(--check-y-amount)) rotate(var(--check-rotate-from));
+  filter: blur(var(--check-blur-from));
+  transition: none;
+}
+
+.t-success-check[data-state="in"] {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
+  filter: blur(0);
+  transition:
+    opacity var(--check-opacity-dur) var(--check-ease-out),
+    transform var(--check-bob-dur) var(--check-ease-bob),
+    filter var(--check-blur-dur) var(--check-ease-out);
+}
+
+.t-success-check[data-state="in"] path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: tSuccessCheckDraw var(--check-path-dur) var(--check-ease-out) var(--check-path-delay) forwards;
+}
+
+@keyframes tSuccessCheckDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* =========================================================
+   08-Page Side-by-Side: 并排页面平滑切换 (08-page-side-by-side.md)
+   ========================================================= */
+:root {
+  --page-slide-dur: 250ms;
+  --page-fade-dur: 250ms;
+  --page-slide-distance: 12px;
+  --page-blur: 3px;
+  --page-stagger: 0ms;
+  --page-slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --page-fade-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.t-page-slide {
+  position: relative;
+}
+
+/* 基底页面：在位、无位移偏置、无滤镜模糊 */
+.t-page-slide > .t-page {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  z-index: 0;
+  transform: none;
+  filter: none;
+  transition:
+    opacity    var(--page-fade-dur)  var(--page-fade-ease),
+    transform  var(--page-slide-dur) var(--page-slide-ease),
+    filter     var(--page-slide-dur) var(--page-slide-ease),
+    visibility var(--page-fade-dur)  var(--page-fade-ease);
+}
+
+/* 激活状态的页面：完全居中、清晰可见、接收交互 */
+.t-page-slide[data-page="1"] > .t-page[data-page-id="1"],
+.t-page-slide[data-page="2"] > .t-page[data-page-id="2"] {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  z-index: 10;
+  transform: none !important;
+  filter: none !important;
+  will-change: auto;
+  transition-delay: var(--page-stagger);
+}
+
+/* 退场/候场状态：仅当处于非激活状态时，才按方向施加位移与模糊 */
+/* 当第 2 页激活时，第 1 页向左滑出退场 */
+.t-page-slide[data-page="2"] > .t-page[data-page-id="1"] {
+  transform: translateX(calc(var(--page-slide-distance) * -1));
+  filter: blur(var(--page-blur));
+}
+
+/* 当第 1 页激活时，第 2 页在右侧候场（向右偏置） */
+.t-page-slide[data-page="1"] > .t-page[data-page-id="2"] {
+  transform: translateX(var(--page-slide-distance));
+  filter: blur(var(--page-blur));
+}
+
+/* 强制非激活页面及其子代不可拦截任何鼠标/滚轮事件 */
+.t-page-slide[data-page="1"] > .t-page[data-page-id="2"] *,
+.t-page-slide[data-page="2"] > .t-page[data-page-id="1"] * {
+  pointer-events: none !important;
+}
+
+/* =========================================================
+   ComposeCopilot 专用页面向导与对话流平滑动效（独立命名空间）
+   ========================================================= */
+.t-copilot-slide {
+  position: relative;
+}
+
+.t-copilot-slide > .t-copilot-page {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  z-index: 0;
+  transform: none;
+  filter: none;
+  transition:
+    opacity    var(--page-fade-dur, 250ms)  var(--page-fade-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform  var(--page-slide-dur, 250ms) var(--page-slide-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    filter     var(--page-slide-dur, 250ms) var(--page-slide-ease, cubic-bezier(0.22, 1, 0.36, 1)),
+    visibility var(--page-fade-dur, 250ms)  var(--page-fade-ease, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.t-copilot-slide[data-page="1"] > .t-copilot-page[data-page-id="1"],
+.t-copilot-slide[data-page="2"] > .t-copilot-page[data-page-id="2"] {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  z-index: 10;
+  transform: none !important;
+  filter: none !important;
+  will-change: auto;
+  transition-delay: var(--page-stagger);
+}
+
+/* 当对话流激活时，向导向左滑出退场 */
+.t-copilot-slide[data-page="2"] > .t-copilot-page[data-page-id="1"] {
+  transform: translateX(calc(var(--page-slide-distance, 8px) * -1));
+  filter: blur(var(--page-blur, 3px));
+}
+
+/* 当向导激活时，对话流在右侧候场 */
+.t-copilot-slide[data-page="1"] > .t-copilot-page[data-page-id="2"] {
+  transform: translateX(var(--page-slide-distance, 8px));
+  filter: blur(var(--page-blur, 3px));
+}
+
+.t-copilot-slide[data-page="1"] > .t-copilot-page[data-page-id="2"] *,
+.t-copilot-slide[data-page="2"] > .t-copilot-page[data-page-id="1"] * {
+  pointer-events: none !important;
+}
+
+/* =========================================================
+   18-Texts Reveal: 阶梯式文本模糊渐入 (18-texts-reveal.md)
+   ========================================================= */
+:root {
+  --stagger-dur: 400ms;
+  --stagger-distance: 10px;
+  --stagger-stagger: 45ms;
+  --stagger-blur: 3px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.t-stagger-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(var(--stagger-distance));
+  filter: blur(var(--stagger-blur));
+  transition:
+    opacity   var(--stagger-dur) var(--stagger-ease),
+    transform var(--stagger-dur) var(--stagger-ease),
+    filter    var(--stagger-dur) var(--stagger-ease);
+  will-change: opacity, transform, filter;
+}
+
+.t-stagger.is-shown .t-stagger-line {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.t-stagger.is-shown .t-stagger-line--1 { transition-delay: 0ms; }
+.t-stagger.is-shown .t-stagger-line--2 { transition-delay: var(--stagger-stagger); }
+.t-stagger.is-shown .t-stagger-line--3 { transition-delay: calc(var(--stagger-stagger) * 2); }
+.t-stagger.is-shown .t-stagger-line--4 { transition-delay: calc(var(--stagger-stagger) * 3); }
+.t-stagger.is-shown .t-stagger-line--5 { transition-delay: calc(var(--stagger-stagger) * 4); }
+
+/* =========================================================
+   21-Accordion: 平滑生长与折叠容器 (21-accordion.md)
+   ========================================================= */
+:root {
+  --acc-expand: 250ms;
+  --acc-collapse: 250ms;
+  --acc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.t-acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--acc-collapse) var(--acc-ease);
+}
+
+.t-acc[data-open="true"] .t-acc-panel,
+.t-acc-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--acc-expand) var(--acc-ease);
+}
+
+.t-acc-panel-inner {
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity var(--acc-collapse) var(--acc-ease),
+    filter var(--acc-collapse) var(--acc-ease);
+}
+
+.t-acc[data-open="true"] .t-acc-panel-inner,
+.t-acc-panel[data-open="true"] .t-acc-panel-inner {
+  opacity: 1;
+  filter: blur(0);
+  transition:
+    opacity var(--acc-expand) var(--acc-ease),
+    filter var(--acc-expand) var(--acc-ease);
+}
+
+/* =========================================================
+   无障碍：操作系统级别减弱动态效果保护
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .t-page-slide > .t-page,
+  .t-copilot-slide > .t-copilot-page,
+  .t-stagger-line,
+  .t-acc-panel,
+  .t-acc-panel-inner {
+    transition: none !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
