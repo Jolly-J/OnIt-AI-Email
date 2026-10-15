@@ -43,7 +43,8 @@ data/large_attachments/*
 skills-lock.json
 
 # 本地文档与规划草稿
-docs/
+docs/*
+!docs/images/
 品牌资源/
 
 

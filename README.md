@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Jolly-J/ai-email-assistant"><img src="https://img.shields.io/badge/Version-v1.0.0-blue.svg" alt="Version" /></a>
+  <a href="https://github.com/Jolly-J/OnIt-AI-Email"><img src="https://img.shields.io/badge/Version-v1.0.0-blue.svg" alt="Version" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-purple.svg" alt="License: MIT" /></a>
   <img src="https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python" alt="Python 3.10+" />
   <img src="https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg?logo=fastapi" alt="FastAPI" />
@@ -34,6 +34,12 @@
 [🚀 5 秒极速体验 (Mock模式)](#-5-秒极速体验--开箱即用-mock-模式) · [💡 为什么做这个项目？](#-为什么做这个项目--重新思考ai接管邮箱的真实痛点) · [⚖️ 核心差异化定位](#-核心差异化对比为什么不只是一个-ai-托管插件) · [✨ 核心功能亮点](#-核心功能亮点) · [🗺️ 协同生态演进规划](#-企业协同生态演进规划) · [🛠️ 真实企业部署](#-真实企业部署指引) · [🤝 欢迎共创](#-写在前面--欢迎共创)
 
 </div>
+
+<p align="center">
+  <img src="docs/images/showcase-overview.jpg" alt="知了 OnIt · 深度嵌入企业工作软件运行全貌" width="880" style="border-radius: 12px; box-shadow: 0 16px 36px rgba(0,0,0,0.12);" />
+  <br />
+  <sub>🖥️ <strong>全景工作台</strong>：深度重构工作环境 —— 邮件研读、AI 伴随提炼核心要点与钉钉视频会议日程一键闭环</sub>
+</p>
 
 ---
 
@@ -82,8 +88,8 @@
 
 ```bash
 # 1. 克隆本项目
-git clone https://github.com/Jolly-J/ai-email-assistant.git
-cd ai-email-assistant
+git clone https://github.com/Jolly-J/OnIt-AI-Email.git
+cd OnIt-AI-Email
 
 # 2. 安装基础依赖（仅需标准 Node.js 与 Python 环境）
 npm ci
@@ -121,6 +127,13 @@ npm run dev:mock
 - **读信伴随与主动写信向导**：
   - 读信伴随（`AICopilot`）：随时口语化微调草稿（例如：“语气更委婉一点”、“推迟到周三”）；
   - 写信向导（`ComposeCopilot`）：内置外贸推介、商务合作、会议敲定、客情维系等 4 大高频场景向导。
+
+<div align="center">
+  <img src="docs/images/showcase-editor.jpg" width="49%" alt="AI 伴随起草与高级编辑器双向实时同步" style="border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);" />
+  <img src="docs/images/showcase-bilingual-draft.jpg" width="49%" alt="双语公文 1:1 镜像对照与多轮交互微调" style="border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);" />
+  <br />
+  <sub>✍️ <strong>左：自然语言驱动起草与高级编辑器双向实时同步</strong> ｜ <strong>右：双语公文 1:1 镜像对照与多轮交互微调定稿</strong></sub>
+</div>
 
 ### 3. 🌍 复杂长邮件高保真原位翻译
 - **不破坏原排版**：采用原位 HTML 解耦翻译策略，完整保留原信的表格、字体、配色与视觉层次；
@@ -269,7 +282,7 @@ flowchart TD
 本项目诞生于我们团队内部对“跨国邮件沟通效率与尊严”的真实痛点探索。经过多轮迭代与企业实测，我们将其完整脱敏开源。
 
 我们非常欢迎社区开发者和外贸从业者一同参与完善：
-- 💡 **提交需求或 Bug**：欢迎随时提交 [Issues](https://github.com/Jolly-J/ai-email-assistant/issues)；
+- 💡 **提交需求或 Bug**：欢迎随时提交 [Issues](https://github.com/Jolly-J/OnIt-AI-Email/issues)；
 - 🛠️ **贡献代码**：欢迎提交 Pull Request，为更多协同生态（如飞书、企业微信、Outlook 插件等）扩展适配；
 - 🌟 **如果这个项目对你的跨国沟通有所启发或帮助，欢迎点亮右上角的 Star 给予支持！**
 
